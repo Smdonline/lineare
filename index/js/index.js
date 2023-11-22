@@ -137,6 +137,23 @@ class Turno {
 
 }
 
+class Riga {
+    #giorno
+    #nome =""
+    #turni
+
+    constructor(nGiorno, nNome="",nTurni=[]){
+        this.#giorno = nGiorno
+        this.#nome = nNome
+        this.#turni = nTurni
+    }
+    agiungiTurno(nTurno){
+            this.#turni.push(nTurno)
+
+    }
+
+}
+
 let inizio = new Durata(12, 30)
 let durata = new Durata(3, 15)
 let turno = new Turno(new Date("2023-11-16"), inizio, durata)
@@ -144,5 +161,9 @@ let turno = new Turno(new Date("2023-11-16"), inizio, durata)
 
 
 console.log(turno.getGiorno()+ " "+turno.getInizio()+" "+turno.getFine()+" "+turno.durata())
+
+let riga = new Riga(turno.giorno)
+riga.agiungiTurno(turno)
+console.log(riga.turni)
 
 
