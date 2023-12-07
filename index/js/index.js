@@ -79,7 +79,7 @@ class Turno {
     #fine
     #maxFineTurno
     #maxOre = 36
-    #minTurnoOre = new Durata(2)
+    #minTurnoOre = new Durata(1)
 
 
     constructor(nGiorno, nInizio, nDurata) {
@@ -88,33 +88,37 @@ class Turno {
             this.inizio = new Date(this.giorno.toUTCString())
             this.fine = new Date(this.giorno.toUTCString())
         }
+
         if (nInizio instanceof Durata) {
             this.inizio.setUTCMinutes(nInizio.minuti)
             this.inizio.setUTCHours(this.inizio.getUTCHours() + nInizio.ore)
             this.inizio.setUTCDate(this.inizio.getUTCDate() + nInizio.giorni)
         }
         if (nDurata instanceof Durata) {
-            this.fine.setUTCMinutes(this.inizio.getUTCMinutes() + nDurata.minuti)
-            this.fine.setUTCHours(this.inizio.getUTCHours() + nDurata.ore)
-            this.fine.setUTCDate(this.inizio.getUTCDate() + nDurata.giorni)
+            let nFine=new Durata(nInizio.giorni*24+nInizio.ore+nDurata.giorni*24+nDurata.ore,nInizio.minuti+nDurata.minuti)
+            this.fine.setUTCMinutes(this.giorno.getUTCMinutes() + nFine.minuti)
+            this.fine.setUTCHours(this.giorno.getUTCHours() + nFine.ore)
 
-        } else this.fine.setUTCHours(this.inizio.getUTCHours() + this.minTurnoOre.ore)
+            this.fine.setUTCDate(this.giorno.getUTCDate() +  + nFine.giorni)
+        } else this.fine.setUTCHours(this.inizio.getUTCHours() + this.#minTurnoOre.ore)
     }
 
     #formatDateTime(date,mostraTempo=true){
+
         let mese, giorno, ora, minuti
         if(date.getUTCMonth()<10) mese="0"+date.getUTCMonth()
         else mese = date.getUTCMonth()
-        if(date.getUTCDay()<10) giorno="0"+date.getUTCDay()
-        else ora = date.getUTCDay()
+
+        if(date.getUTCDate()<10) giorno="0"+date.getUTCDate()
+        else giorno = date.getUTCDate()
         if(date.getUTCHours()<10) ora="0"+date.getUTCHours()
         else ora = date.getUTCHours()
         if(date.getUTCMinutes()<10) minuti="0"+date.getUTCMinutes()
         else minuti = date.getUTCMinutes()
 
-        let rezult = date.getUTCFullYear() + "-" + mese + "-" + giorno
+        let rezult = date.getUTCFullYear() + "-" + mese+ "-" + giorno
         if (mostraTempo === true) rezult+= " "+ora +":"+minuti
-    return rezult
+        return rezult
     }
     durata(){
         let ore, minuti,millisec
@@ -134,36 +138,84 @@ class Turno {
     getFine(){
         return this.#formatDateTime(this.fine)
     }
+    toString(){
+        return this.getInizio() + "--"+this.getFine()
+    }
 
 }
 
 class Riga {
-    #giorno
-    #nome =""
-    #turni
+    giorno
+    nome =""
+    turni
+    maxTurni = 4
 
     constructor(nGiorno, nNome="",nTurni=[]){
-        this.#giorno = nGiorno
-        this.#nome = nNome
-        this.#turni = nTurni
+        this.giorno = nGiorno
+        this.nome = nNome
+        this.turni = nTurni
     }
     agiungiTurno(nTurno){
-            this.#turni.push(nTurno)
+        if (this.turni.length < this.maxTurni) {
+            if (this.giorno.getTime() == nTurno.giorno.getTime()){
+                let canBeAdded = true
+                this.turni.forEach((t)=>{
+                    if( nTurno.inizio > t.inizio && nTurno.inizio < t.fine){
+                        console.log('contine inceputul')
+                        canBeAdded = false
+                    } else if ( nTurno.fine > t.inizio && nTurno.fine < t.fine ){
+                        console.log('conzine sfarsitul')
+                        canBeAdded = false
+                    } else if ( nTurno.inizio >= t.inizio && nTurno.fine <= t.fine ){
+                        console.log(nTurno.toString() +'e continut'+ t.toString())
+                        canBeAdded = false
+                    } else if ( nTurno.inizio <= t.inizio && nTurno.fine  >= t.fine ){
+                        console.log('contine alt turno')
+                        canBeAdded = false
+                    }
 
+                })
+                if (canBeAdded){
+                    this.turni.push(nTurno)
+                    this.turni.sort(function (a, b) {
+                        if (a.inizio < b.inizio){
+                            return -1
+                        } else if(a.inizio > b.inizio){
+                            return 1
+                        } else return 0
+                    })
+                }
+            }
+        }else {
+            console.log("esistono gia tre turni ")
+        }
+
+
+
+    }
+    getGiorno(){
+        return this.giorno
     }
 
 }
 
-let inizio = new Durata(12, 30)
-let durata = new Durata(3, 15)
-let turno = new Turno(new Date("2023-11-16"), inizio, durata)
-
-
-
-console.log(turno.getGiorno()+ " "+turno.getInizio()+" "+turno.getFine()+" "+turno.durata())
-
-let riga = new Riga(turno.giorno)
+let inizio = new Durata(9)
+let inizio1 = new Durata(15)
+let inizio2 = new Durata(18)
+let inizio3 = new Durata(21)
+let durata = new Durata(33,1)
+let turno = new Turno(new Date("2023/01/12 utc"), inizio)
+let turno1 = new Turno(new Date("2023/01/12 utc"), inizio1, durata)
+let turno2 = new Turno(new Date("2023/01/12 utc"), inizio2, durata)
+let turno3 = new Turno(new Date("2023/01/12 utc"), inizio3, durata)
+ let riga = new Riga(turno.giorno)
 riga.agiungiTurno(turno)
+riga.agiungiTurno(turno1)
+riga.agiungiTurno(turno2)
+riga.agiungiTurno(turno3)
+//
 console.log(riga.turni)
+
+
 
 
