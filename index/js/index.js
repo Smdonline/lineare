@@ -199,23 +199,29 @@ class Riga {
 
 }
 
-let inizio = new Durata(9)
-let inizio1 = new Durata(15)
-let inizio2 = new Durata(18)
-let inizio3 = new Durata(21)
-let durata = new Durata(33,1)
-let turno = new Turno(new Date("2023/01/12 utc"), inizio)
-let turno1 = new Turno(new Date("2023/01/12 utc"), inizio1, durata)
-let turno2 = new Turno(new Date("2023/01/12 utc"), inizio2, durata)
-let turno3 = new Turno(new Date("2023/01/12 utc"), inizio3, durata)
- let riga = new Riga(turno.giorno)
-riga.agiungiTurno(turno)
-riga.agiungiTurno(turno1)
-riga.agiungiTurno(turno2)
-riga.agiungiTurno(turno3)
-//
-console.log(riga.turni)
+// let inizio = new Durata(9)
+// let inizio1 = new Durata(15)
+// let inizio2 = new Durata(18)
+// let inizio3 = new Durata(21)
+// let durata = new Durata(33,1)
+// let turno = new Turno(new Date("2023/01/12 utc"), inizio)
+// let turno1 = new Turno(new Date("2023/01/12 utc"), inizio1, durata)
+// let turno2 = new Turno(new Date("2023/01/12 utc"), inizio2, durata)
+// let turno3 = new Turno(new Date("2023/01/12 utc"), inizio3, durata)
+//  let riga = new Riga(turno.giorno)
+// riga.agiungiTurno(turno)
+// riga.agiungiTurno(turno1)
+// riga.agiungiTurno(turno2)
+// riga.agiungiTurno(turno3)
+// console.log(riga.turni)
 
+let getDateBtn =document.querySelector("#myBtn")
+getDateBtn.addEventListener("click",()=>{
+    const myDate = document.querySelector("#myDate")
 
+    const data= new Date(myDate.value +" utc")
 
+    const riga=new Riga(data)
+    console.log(riga)
+})
 
