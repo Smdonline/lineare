@@ -1,46 +1,5 @@
 /*class orario in formato hh:mm*/
-class Orario {
-    #ore
-    #minuti
-    constructor(ore, minuti = 0) {
-        ore = parseInt(ore)
-        minuti = parseInt(minuti)
-        if (!isNaN(ore) && ore >= 0) {
-            this.setOre(ore)
-        } else this.ore = 0
-        if (!isNaN(minuti) && minuti >= 0) {
-            this.setMinuti(minuti)
-        } else this.minuti = 0
-    }
-    setMinuti(minuti) {
-        minuti = parseInt(minuti)
-        if (!isNaN(minuti)) {
-            this.minuti = minuti % 60
-        }
 
-    }
-    setOre(ore) {
-        ore = parseInt(ore)
-        if (!isNaN(ore)) {
-            this.ore = ore % 24
-        }
-
-    }
-    fromString(stringTempo) {
-        let tempo = stringTempo.split(":", 2)
-        if (tempo) {
-            switch (tempo.length) {
-                case 1:
-                    this.setOre(parseInt(tempo[0]))
-                    break
-                case 2:
-                    this.setOre(parseInt(tempo[0]))
-                    this.setMinuti(parseInt(tempo[1]))
-                    break
-            }
-        }
-    }
-}
 
 class Durata {
     giorni
@@ -218,10 +177,14 @@ class Riga {
 let getDateBtn =document.querySelector("#myBtn")
 getDateBtn.addEventListener("click",()=>{
     const myDate = document.querySelector("#myDate")
-
     const data= new Date(myDate.value +" utc")
 
-    const riga=new Riga(data)
-    console.log(riga)
+    if (!isNaN(data.getTime())){
+        const riga=new Riga(data)
+        alert(riga.giorno.toUTCString())
+    } else{
+        alert( "date not valid ")
+    }
+
 })
 

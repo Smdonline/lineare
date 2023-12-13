@@ -5,10 +5,18 @@
     <title>Title</title>
     <link rel="stylesheet" href="index/css/index.css">
     <script defer src="index/js/index.js"></script>
+    <script defer src="index/js/func.js"></script>
 
 </head>
 <body>
 <input type="date" id="myDate">
 <button id="myBtn">create </button>
+
+<form action="#" id="turno-form">
+    <label for="data-turno">Data del turno</label><input type="date" id="data-turno" class="input-data-turno">
+    <label for="ora-inizio-turno">Data del turno</label><input type="time" id="ora-inizio-turno" class="input-inizio-turno" >
+    <label for="ora-fine-turno">Data del turno</label><input type="time" id="ora-fine-turno" class="input-fine-turno">
+    <input type="submit" value="imposta" id="submit-turno">
+</form>
 </body>
 </html>
